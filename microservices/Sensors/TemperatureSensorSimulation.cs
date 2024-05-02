@@ -10,12 +10,12 @@ public class TemperatureSensorSimulation(in IOptions<SensorConfig[]> sensorConfi
     private readonly int minValue = sensorConfig.Value.First(x => x.Type == SensorType.Temperature).MinValue;
     private readonly int time = sensorConfig.Value.First(x => x.Type == SensorType.Temperature).Frequency * 1000;
 
-    public TemperatureMeasuredEvent Measure()
+    public async Task<TemperatureMeasuredEvent> Measure(CancellationToken cancellationToken = default)
     {
         var random = new Random();
         var value = random.Next(minValue, maxValue);
 
-        Thread.Sleep(time);
+        await Task.Delay(time, cancellationToken);
 
         return new TemperatureMeasuredEvent(value, maxValue, minValue, DateTimeOffset.Now);
     }
