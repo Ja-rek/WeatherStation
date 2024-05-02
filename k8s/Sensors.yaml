@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sensors-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sensors
+  template:
+    metadata:
+      labels:
+        app: sensors
+    spec:
+      containers:
+      - name: sensors-container
+        image: sensors:latest
+        imagePullPolicy: Never
