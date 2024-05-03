@@ -1,16 +1,8 @@
 ﻿namespace Sensors.Config;
 
-public record SensorConfig
+public record SensorConfig(SensorType Type, int MinValue, int MaxValue, int Frequency)
 {
-    private int frequency;
-
-    public required SensorType Type { get; set;}
-    public required int MinValue { get; set;}
-    public required int MaxValue { get; set;}
-    public string? EncoderType { get;}
-    public required int Frequency 
-    { 
-        get => frequency * 1000 ; 
-        set => frequency = value; 
+    public SensorConfig() : this(default, default, default, default)
+    {
     }
-};
+}

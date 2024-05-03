@@ -15,14 +15,9 @@ public class TemperatureSensorSimulationTests
     {
         sensorConfigMock = new Mock<IOptions<SensorConfig[]>>();
 
-        SensorConfig[] config = [
-            new SensorConfig
-            {
-                Type = SensorType.Temperature,
-                MinValue = 0,
-                MaxValue = 100,
-                Frequency = 1
-            }
+        SensorConfig[] config = 
+        [
+            new SensorConfig(SensorType.Temperature, 0, 100, 1)
         ];
 
         sensorConfigMock.Setup(x => x.Value).Returns(config);

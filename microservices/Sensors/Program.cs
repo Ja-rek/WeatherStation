@@ -16,13 +16,17 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
         })
         .ConfigureServices((hostContext, services) =>
         {
+            var host = hostContext.Configuration.GetSection("RabbitMq:Host").Value;
+            var username = hostContext.Configuration.GetSection("RabbitMq:Username").Value;
+            var password = hostContext.Configuration.GetSection("RabbitMq:Password").Value;
+
             services.AddMassTransit(x =>
             {
                 x.UsingRabbitMq((context,cfg) =>
                 {
-                    cfg.Host("my-release3-rabbitmq", "/", h => {
-                        h.Username("user");
-                        h.Password("SXghNIgaG1iV64oP");
+                    cfg.Host(host, "/", h => {
+                        h.Username(username);
+                        h.Password(password);
                     });
                     
                     cfg.ConfigureEndpoints(context);
@@ -30,7 +34,6 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
             });
             
             services.AddScoped<ISensor, TemperatureSensorSimulation>();
-            
             services.Configure<SensorConfig[]>(hostContext.Configuration.GetSection("Sensors"));
             services.AddHostedService<SensorBackgroundService>();
         });
