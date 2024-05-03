@@ -3,17 +3,17 @@ using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using NHibernate.Tool.hbm2ddl;
 
-namespace SensoreHistoryInfrastructure;
+namespace Weather.Infrastructure;
 
 public class SessionFactoryProvider
 {
-    public static ISessionFactory CreateSessionFactory(Action<MappingConfiguration> mappingConfiguration)
+    public static ISessionFactory CreateSessionFactory(Action<MappingConfiguration> mappingConfiguration, string sqlString)
     {
-        var sqlString = "Server=mssql-service,1433;Database=Sensor;User Id=sa;Password=Password123!;";
+        //var sqlString = "Server=mssql-service,1433;Database=Sensor;User Id=sa;Password=Password123!;";
 
         var createDb = false;
 
-        Action<NHibernate.Cfg.Configuration> shemaConfig = (cfg) =>
+        Action<NHibernate.Cfg.Configuration> schemaConfig = (cfg) =>
         {
             cfg.Properties["show_sql"] = "true";
             cfg.Properties["prepare_sql"] = "true";
@@ -27,7 +27,7 @@ public class SessionFactoryProvider
         var factory = Fluently.Configure()
             .Database(MsSqlConfiguration.MsSql7.ConnectionString(sqlString).ShowSql())
             .Mappings(mappingConfiguration)
-            .ExposeConfiguration(shemaConfig)
+            .ExposeConfiguration(schemaConfig)
             .BuildSessionFactory();
 
         return factory;

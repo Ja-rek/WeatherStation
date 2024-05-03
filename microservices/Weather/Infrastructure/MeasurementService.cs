@@ -1,7 +1,8 @@
 ﻿using NHibernate;
 using NHibernate.Linq;
+using Weather.Application;
 
-namespace Weather.Application;
+namespace Weather.Infrastructure;
 
 public class MeasurementService<T>(in ISessionFactory sessionFactory) : IMeasurementService<T> where T : class
 {
