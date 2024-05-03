@@ -4,5 +4,5 @@ namespace Sensors;
 
 public interface ISensor
 {
-    Task<TemperatureMeasuredEvent> Measure(CancellationToken cancellationToken = default);
+    Task<TemperatureMeasuredEvent> MeasureAsync(CancellationToken cancellationToken = default);
 }

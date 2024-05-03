@@ -15,7 +15,7 @@ public class TemperatureSensorSimulationTests
     {
         sensorConfigMock = new Mock<IOptions<SensorConfig[]>>();
 
-        SensorConfig[] config = [ 
+        SensorConfig[] config = [
             new SensorConfig
             {
                 Type = SensorType.Temperature,
@@ -36,7 +36,7 @@ public class TemperatureSensorSimulationTests
         var sensorSimulation = new TemperatureSensorSimulation(sensorConfigMock.Object);
 
         // Act
-        var measurement = await sensorSimulation.Measure(cancellationTokenSource.Token);
+        var measurement = await sensorSimulation.MeasureAsync(cancellationTokenSource.Token);
 
         // Assert
         measurement.Should().NotBeNull();

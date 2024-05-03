@@ -16,7 +16,7 @@ public class SensorBackgroundService(in IBus bus,
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            var measurementEvent = sensor.Measure();
+            var measurementEvent = await sensor.MeasureAsync();
 
             logger.LogInformation($"send message with value: {measurementEvent.Value}");
 
