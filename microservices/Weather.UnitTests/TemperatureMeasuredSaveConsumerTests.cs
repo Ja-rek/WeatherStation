@@ -1,6 +1,5 @@
 using Contracts;
 using MassTransit;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Weather.Application;
 using Weather.Application.EventConsumers;
@@ -9,20 +8,17 @@ using Weather.Application.Temperature;
 namespace Weather.UnitTests;
 
 [TestFixture]
-public class TemperatureMeasuredConsumerTests
+public class TemperatureMeasuredSaveConsumerTests
 {
     private TemperatureMeasuredEvent temperatureMeasuredEvent;
-    private Mock<ILogger<TemperatureMeasuredConsumer>> mockLogger;
-    private Mock<ConsumeContext<TemperatureMeasuredEvent>> mockConsumeContext;
+    private Mock<ConsumeContext<TemperatureMeasuredEvent>> stubConsumeContext;
 
     [OneTimeSetUp]
     public void OneTimeSetUp()
     {
-        mockLogger = new Mock<ILogger<TemperatureMeasuredConsumer>>();
-
         temperatureMeasuredEvent = new TemperatureMeasuredEvent(10, 100, 0, DateTimeOffset.Now);
-        mockConsumeContext = new Mock<ConsumeContext<TemperatureMeasuredEvent>>();
-        mockConsumeContext.Setup(x => x.Message).Returns(temperatureMeasuredEvent);
+        stubConsumeContext = new Mock<ConsumeContext<TemperatureMeasuredEvent>>();
+        stubConsumeContext.Setup(x => x.Message).Returns(temperatureMeasuredEvent);
     }
 
     [Test]
@@ -30,10 +26,10 @@ public class TemperatureMeasuredConsumerTests
     {
         // Arrange
         var mockMeasurementService = new Mock<IMeasurementService<TemperatureMeasurement>>();
-        var consumer = new TemperatureMeasuredConsumer(mockLogger.Object, mockMeasurementService.Object, new TemperatureClassifier());
+        var consumer = new TemperatureMeasuredSaveConsumer(mockMeasurementService.Object, new TemperatureClassifier());
 
         // Act
-        await consumer.Consume(mockConsumeContext.Object);
+        await consumer.Consume(stubConsumeContext.Object);
 
         // Assert
         mockMeasurementService.Verify(x => x.Save(It.Is<TemperatureMeasurement>(measurement =>

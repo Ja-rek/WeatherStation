@@ -13,7 +13,8 @@ builder.Services.AddSwaggerGen();
 
 services.AddMassTransit(x =>
 {
-    x.AddConsumer<TemperatureMeasuredConsumer, TemperatureMeasuredConsumerDefinition>();
+    x.AddConsumer<TemperatureMeasuredSaveConsumer>();
+    x.AddConsumer<TemperatureMeasuredNotificationConsumer>();
     x.AddHost(builder.Configuration);
 });
 
@@ -29,11 +30,13 @@ services.AddCors(options =>
         });
 });
 
-services.AddScoped<IMeasurementService<TemperatureMeasurement>,MeasurementService<TemperatureMeasurement>>();
-
 services.AddSingleton(c => SessionFactoryProvider
     .CreateSessionFactory(m => m.FluentMappings.AddFromAssemblyOf<TemperatureMeasurement>(),
     "Server=mssql-service,1433;Database=Sensor;User Id=sa;Password=Password123!;"));
+
+services.AddSignalR();
+services.AddScoped<INotification, Notification>();
+services.AddScoped<IMeasurementService<TemperatureMeasurement>,MeasurementService<TemperatureMeasurement>>();
 
 var app = builder.Build();
 
@@ -44,12 +47,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAllOrigins"); 
-
 app.UseHttpsRedirection();
 
 app.MapGet("/TemperatureMeasurement", async (IMeasurementService<TemperatureMeasurement> service) =>
-{
-    return await service.Get(1000);
-}).WithOpenApi();
+   await service.Get(1000)
+).WithOpenApi();
+
+app.MapHub<NotificationHub>("/NotificationHub");
 
 app.Run();
