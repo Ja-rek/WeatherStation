@@ -8,9 +8,9 @@ public class TemperatureSensorSimulation(in IOptions<SensorConfig[]> sensorConfi
 {
     private readonly int maxValue = sensorConfig.Value.First(x => x.Type == SensorType.Temperature).MaxValue;
     private readonly int minValue = sensorConfig.Value.First(x => x.Type == SensorType.Temperature).MinValue;
-    private readonly int time = sensorConfig.Value.First(x => x.Type == SensorType.Temperature).Frequency * 1000;
+    private readonly int time = sensorConfig.Value.First(x => x.Type == SensorType.Temperature).Frequency;
 
-    public async Task<TemperatureMeasuredEvent> Measure(CancellationToken cancellationToken = default)
+    public async Task<TemperatureMeasuredEvent> MeasureAsync(CancellationToken cancellationToken = default)
     {
         var random = new Random();
         var value = random.Next(minValue, maxValue);
