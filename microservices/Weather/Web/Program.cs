@@ -1,8 +1,9 @@
+using Common;
 using MassTransit;
-using Notifications.Consumers;
-using SensoreHistoryInfrastructure;
-using SensorHistoryApplication;
-using SensorHistoryWeb.Consumers;
+using Weather.Application;
+using Weather.Application.EventConsumers;
+using Weather.Application.Temperature;
+using Weather.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,16 +13,8 @@ builder.Services.AddSwaggerGen();
 
 services.AddMassTransit(x =>
 {
-    x.AddConsumer<SensorMeasurementConsumer, SensorMeasurementConsumerConsumerDefinition>();
-    x.UsingRabbitMq((context,cfg) =>
-    {
-        cfg.Host("my-release3-rabbitmq", "/", h => {
-            h.Username("user");
-            h.Password("SXghNIgaG1iV64oP");
-        });
-        
-        cfg.ConfigureEndpoints(context);
-    });
+    x.AddConsumer<TemperatureMeasuredConsumer, TemperatureMeasuredConsumerDefinition>();
+    x.AddHost(builder.Configuration);
 });
 
 services.AddCors(options =>
@@ -36,10 +29,11 @@ services.AddCors(options =>
         });
 });
 
+services.AddScoped<IMeasurementService<TemperatureMeasurement>,MeasurementService<TemperatureMeasurement>>();
 
-services.AddScoped<MeasurementService>();
 services.AddSingleton(c => SessionFactoryProvider
-    .CreateSessionFactory(m => m.FluentMappings.AddFromAssemblyOf<MeasurementMap>()));
+    .CreateSessionFactory(m => m.FluentMappings.AddFromAssemblyOf<TemperatureMeasurement>(),
+    "Server=mssql-service,1433;Database=Sensor;User Id=sa;Password=Password123!;"));
 
 var app = builder.Build();
 
@@ -53,9 +47,9 @@ app.UseCors("AllowAllOrigins");
 
 app.UseHttpsRedirection();
 
-app.MapGet("/Mesurments", async (MeasurementService service) =>
+app.MapGet("/TemperatureMeasurement", async (IMeasurementService<TemperatureMeasurement> service) =>
 {
-    return await service.GetMeasurements(1000);
+    return await service.Get(1000);
 }).WithOpenApi();
 
 app.Run();

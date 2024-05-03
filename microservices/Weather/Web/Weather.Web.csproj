@@ -20,8 +20,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
-    <ProjectReference Include="..\Measurements.Application\Measurements.Application.csproj" />
-    <ProjectReference Include="..\Measurements.Infrastructure\Measurements.Infrastructure.csproj" />
+    <ProjectReference Include="..\Application\Weather.Application.csproj" />
+    <ProjectReference Include="..\Infrastructure\Weather.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Common\Common.csproj" />
   </ItemGroup>
 
 </Project>

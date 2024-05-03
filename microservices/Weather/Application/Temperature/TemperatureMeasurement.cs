@@ -2,7 +2,7 @@
 
 public class TemperatureMeasurement
 {
-    protected TemperatureMeasurement()
+    public TemperatureMeasurement()
     {
     }
 

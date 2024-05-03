@@ -9,8 +9,6 @@ public class SessionFactoryProvider
 {
     public static ISessionFactory CreateSessionFactory(Action<MappingConfiguration> mappingConfiguration, string sqlString)
     {
-        //var sqlString = "Server=mssql-service,1433;Database=Sensor;User Id=sa;Password=Password123!;";
-
         var createDb = false;
 
         Action<NHibernate.Cfg.Configuration> schemaConfig = (cfg) =>

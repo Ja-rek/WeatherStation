@@ -2,7 +2,7 @@ using MassTransit;
 
 namespace Weather.Application.EventConsumers;
 
-public class SensorMeasurementConsumerDefinition : ConsumerDefinition<TemperatureMeasuredConsumer>
+public class TemperatureMeasuredConsumerDefinition : ConsumerDefinition<TemperatureMeasuredConsumer>
 {
     protected override void ConfigureConsumer(IReceiveEndpointConfigurator endpointConfigurator, IConsumerConfigurator<TemperatureMeasuredConsumer> consumerConfigurator)
     {

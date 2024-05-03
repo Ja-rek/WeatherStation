@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using Common;
+using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -16,21 +17,9 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
         })
         .ConfigureServices((hostContext, services) =>
         {
-            var host = hostContext.Configuration.GetSection("RabbitMq:Host").Value;
-            var username = hostContext.Configuration.GetSection("RabbitMq:Username").Value;
-            var password = hostContext.Configuration.GetSection("RabbitMq:Password").Value;
-
             services.AddMassTransit(x =>
             {
-                x.UsingRabbitMq((context,cfg) =>
-                {
-                    cfg.Host(host, "/", h => {
-                        h.Username(username);
-                        h.Password(password);
-                    });
-                    
-                    cfg.ConfigureEndpoints(context);
-                });
+                x.AddHost(hostContext.Configuration);
             });
             
             services.AddScoped<ISensor, TemperatureSensorSimulation>();

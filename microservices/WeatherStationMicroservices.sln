@@ -17,6 +17,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sensors.UnitTests", "Sensor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.Infrastructure", "Weather\Infrastructure\Weather.Infrastructure.csproj", "{A64ED895-A26F-4A25-AE4C-71B3FFE946DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Weather.Web", "Weather\Web\Weather.Web.csproj", "{1F8405E5-A578-45AB-BE6A-8DE30AB3F9EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{F642E051-60EC-48F9-B613-00360053143C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +51,14 @@ Global
 		{A64ED895-A26F-4A25-AE4C-71B3FFE946DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A64ED895-A26F-4A25-AE4C-71B3FFE946DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A64ED895-A26F-4A25-AE4C-71B3FFE946DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F8405E5-A578-45AB-BE6A-8DE30AB3F9EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F8405E5-A578-45AB-BE6A-8DE30AB3F9EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F8405E5-A578-45AB-BE6A-8DE30AB3F9EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F8405E5-A578-45AB-BE6A-8DE30AB3F9EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F642E051-60EC-48F9-B613-00360053143C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F642E051-60EC-48F9-B613-00360053143C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F642E051-60EC-48F9-B613-00360053143C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F642E051-60EC-48F9-B613-00360053143C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -54,5 +66,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{45698811-1381-436E-8545-3E078C0439A5} = {9B5714E8-4181-4EF2-8EDD-F2F1A204E4D3}
 		{A64ED895-A26F-4A25-AE4C-71B3FFE946DF} = {9B5714E8-4181-4EF2-8EDD-F2F1A204E4D3}
+		{1F8405E5-A578-45AB-BE6A-8DE30AB3F9EC} = {9B5714E8-4181-4EF2-8EDD-F2F1A204E4D3}
 	EndGlobalSection
 EndGlobal
