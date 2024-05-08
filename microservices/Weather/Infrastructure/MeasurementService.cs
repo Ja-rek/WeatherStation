@@ -4,7 +4,7 @@ using Weather.Application;
 
 namespace Weather.Infrastructure;
 
-public class MeasurementService<T>(in ISessionFactory sessionFactory) : IMeasurementService<T> where T : class
+public class MeasurementService<T>(ISessionFactory sessionFactory) : IMeasurementService<T> where T : class
 {
     private readonly ISessionFactory sessionFactory = sessionFactory;
 

@@ -1,5 +1,6 @@
 ﻿using Common;
 using MassTransit;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -23,6 +24,7 @@ static IHostBuilder CreateHostBuilder(string[] args) =>
             });
             
             services.AddScoped<ISensor, TemperatureSensorSimulation>();
-            services.Configure<SensorConfig[]>(hostContext.Configuration.GetSection("Sensors"));
+            services.AddSingleton(hostContext.Configuration.GetSection("Sensors").Get<SensorConfig[]>() ?? []);
+
             services.AddHostedService<SensorBackgroundService>();
         });

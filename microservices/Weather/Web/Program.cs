@@ -31,11 +31,12 @@ services.AddCors(options =>
 });
 
 services.AddSingleton(c => SessionFactoryProvider
-    .CreateSessionFactory(m => m.FluentMappings.AddFromAssemblyOf<TemperatureMeasurement>(),
-    "Server=mssql-service,1433;Database=Sensor;User Id=sa;Password=Password123!;"));
+    .CreateSessionFactory(m => m.FluentMappings.AddFromAssemblyOf<TemperatureMeasurementMap>(),
+        builder.Configuration.GetSection("SQLConnectionString").Get<string>() ?? string.Empty));
 
 services.AddSignalR();
 services.AddScoped<INotification, Notification>();
+services.AddScoped<IClassifierService, TemperatureClassifier>();
 services.AddScoped<IMeasurementService<TemperatureMeasurement>,MeasurementService<TemperatureMeasurement>>();
 
 var app = builder.Build();

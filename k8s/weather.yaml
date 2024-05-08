@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weather
+  template:
+    metadata:
+      labels:
+        app: weather
+    spec:
+      initContainers:
+      - name: init-script
+        image: mcr.microsoft.com/mssql-tools
+        volumeMounts:
+        - name: init-script-volume
+          mountPath: /init/init-script.sh
+          subPath: init-script.sh
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          ./init/init-script.sh
+        env:
+        - name: SA_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mssql-secret
+              key: SA_PASSWORD
+      containers:
+      - name: weather
+        image: weather-img:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Production
+        - name: SQLConnectionString
+          valueFrom:
+            secretKeyRef:
+              name: connection-string-secret
+              key: sql
+        volumeMounts:
+        - name: appsettings-volume
+          mountPath: /app/appsettings.json
+          subPath: appsettings.json
+      volumes:
+      - name: appsettings-volume
+        configMap:
+          name: weather-appsettings
+      - name: init-script-volume
+        configMap:
+          name: mssql-init-script
+          defaultMode: 0777
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: weather-appsettings
+data:
+  appsettings.json: |-
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Information",
+          "Microsoft.AspNetCore": "Warning"
+        }
+      },
+      "RabbitMq": {
+        "Host": "mssql-rabbitmq",
+        "Username": "user",
+        "Password": "password123"
+      }
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: weather-service
+spec:
+  selector:
+    app: weather
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: 8080
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: connection-string-secret
+type: Opaque
+data:
+  sql: "U2VydmVyPW1zc3FsLXNlcnZpY2UsMTQzMztEYXRhYmFzZT1TZW5zb3JzO1VzZXIgSWQ9c2E7UGFzc3dvcmQ9UGFzc3dvcmQxMjMh"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mssql-init-script
+data:
+  init-script.sh: |
+    echo "Waiting for SQL Server to start..."
+    until /opt/mssql-tools/bin/sqlcmd -S mssql-service,1433 -U sa -P $SA_PASSWORD -l 30 -Q "SELECT 1"; do
+      sleep 1
+    done
+    echo "SQL Server has started."
+    /opt/mssql-tools/bin/sqlcmd -S mssql-service,1433 -U sa -P $SA_PASSWORD -l 30 -Q "CREATE DATABASE Sensors"

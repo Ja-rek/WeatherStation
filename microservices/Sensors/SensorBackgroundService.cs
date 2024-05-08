@@ -4,9 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Sensors;
 
-public class SensorBackgroundService(in IBus bus, 
-    in ISensor sensor, 
-    in ILogger<SensorBackgroundService> logger) : BackgroundService
+public class SensorBackgroundService(IBus bus, 
+    ISensor sensor, 
+    ILogger<SensorBackgroundService> logger) : BackgroundService
 {
     private readonly IBus bus = bus;
     private readonly ISensor sensor = sensor;

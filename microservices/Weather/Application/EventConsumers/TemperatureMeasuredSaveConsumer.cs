@@ -4,8 +4,8 @@ using Weather.Application.Temperature;
 
 namespace Weather.Application.EventConsumers;
 
-public class TemperatureMeasuredSaveConsumer(in IMeasurementService<TemperatureMeasurement> service,
-    in IClassifierService classifier) : IConsumer<TemperatureMeasuredEvent>
+public class TemperatureMeasuredSaveConsumer(IMeasurementService<TemperatureMeasurement> service,
+    IClassifierService classifier) : IConsumer<TemperatureMeasuredEvent>
 {
     private readonly IMeasurementService<TemperatureMeasurement> service = service;
     private readonly IClassifierService classifier = classifier;

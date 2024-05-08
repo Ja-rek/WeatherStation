@@ -23,7 +23,7 @@ public class SessionFactoryProvider
         };
 
         var factory = Fluently.Configure()
-            .Database(MsSqlConfiguration.MsSql7.ConnectionString(sqlString).ShowSql())
+            .Database(MsSqlConfiguration.MsSql2012.ConnectionString(sqlString).ShowSql())
             .Mappings(mappingConfiguration)
             .ExposeConfiguration(schemaConfig)
             .BuildSessionFactory();

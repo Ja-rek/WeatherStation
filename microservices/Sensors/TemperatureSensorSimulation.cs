@@ -1,16 +1,15 @@
 ﻿using Contracts;
-using Microsoft.Extensions.Options;
 using Sensors.Config;
 
 namespace Sensors;
 
-public class TemperatureSensorSimulation(in IOptions<SensorConfig[]> sensorConfig) : ISensor
+public class TemperatureSensorSimulation(SensorConfig[] sensorConfig) : ISensor
 {
-    private readonly SensorConfig sensor = sensorConfig.Value.First(x => x.Type == SensorType.Temperature);
+    private readonly SensorConfig[] sensorConfig = sensorConfig;
 
     public async Task<TemperatureMeasuredEvent> MeasureAsync(CancellationToken cancellationToken = default)
     {
-        var (_, minValue, maxValue, frequency) = sensor;
+        var (_, minValue, maxValue, frequency) = sensorConfig.First(x => x.Type == SensorType.Temperature);
         var time = frequency * 1000;
 
         var random = new Random();

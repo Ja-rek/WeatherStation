@@ -3,7 +3,7 @@ using Weather.Application;
 
 namespace Weather.Infrastructure;
 
-public class Notification(in IHubContext<NotificationHub> hubContext) : INotification
+public class Notification(IHubContext<NotificationHub> hubContext) : INotification
 {
     private readonly IHubContext<NotificationHub> hubContext = hubContext;
 

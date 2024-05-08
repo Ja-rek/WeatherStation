@@ -14,5 +14,41 @@ spec:
     spec:
       containers:
       - name: sensors-container
-        image: sensors:latest
+        image: sensors-img:latest
         imagePullPolicy: Never
+        volumeMounts:
+        - name: appsettings-volume
+          mountPath: /app/appsettings.json
+          subPath: appsettings.json
+      volumes:
+      - name: appsettings-volume
+        configMap:
+          name: sensor-appsettings
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sensor-appsettings
+data:
+  appsettings.json: |-
+    {
+      "Sensors": [
+        {
+          "Type": "temperature",
+          "MinValue": -10,
+          "MaxValue": 100,
+          "Frequency": 2
+        },
+        {
+          "Type": "wind",
+          "MinValue": -10,
+          "MaxValue": 100,
+          "Frequency": 2
+        }
+      ],
+      "RabbitMq": {
+        "Host": "mssql-rabbitmq",
+        "Username": "user",
+        "Password": "password123"
+      }
+    }
